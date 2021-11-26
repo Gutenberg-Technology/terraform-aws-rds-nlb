@@ -63,18 +63,6 @@ module "lambda_function" {
 
   attach_policy_statements = true
   policy_statements = {
-    createNetIfaces = {
-      effect = "Allow"
-      actions = [
-        "elasticloadbalancing:RegisterTargets",
-        "elasticloadbalancing:DeregisterTargets",
-        "elasticloadbalancing:DescribeTargetHealth",
-        "ec2:CreateNetworkInterface",
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:DeleteNetworkInterface"
-      ]
-      resources = ["*"]
-    }
     writeLogs = {
       effect = "Allow"
       actions = [
@@ -83,6 +71,16 @@ module "lambda_function" {
         "logs:PutLogEvents"
       ]
       resources = ["arn:aws:logs:*:*:*"]
+    }
+    createNetIfaces = {
+      effect = "Allow"
+      actions = [
+        "elasticloadbalancing:*",
+        "ec2:CreateNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DeleteNetworkInterface"
+      ]
+      resources = ["*"]
     }
   }
 
@@ -100,13 +98,13 @@ module "lambda_function" {
 
 # You want to register your db_instances when your apply
 # this module. Don't you ?
-# data "aws_lambda_invocation" "this" {
-# function_name = module.lambda_function.lambda_function_qualified_arn
-#
-# input = <<EOJSON
-# {
-# "Origin": "terraform invokation of ${var.name}"
-# }
-# EOJSON
-# }
+data "aws_lambda_invocation" "this" {
+  function_name = module.lambda_function.lambda_function_qualified_arn
+
+  input = <<EOJSON
+{
+"Origin": "terraform invokation of ${var.name}"
+}
+EOJSON
+}
 
