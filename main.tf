@@ -72,24 +72,27 @@ module "lambda_function" {
       ]
       resources = ["arn:aws:logs:*:*:*"]
     }
-    elbv2TargetAccess = {
+    # elbv2TargetAccess = {
+    # effect = "Allow"
+    # actions = [
+    # "elasticloadbalancing:RegisterTargets",
+    # "elasticloadbalancing:DescribeTargetHealth",
+    # "elasticloadbalancing:DeregisterTargets"
+    # ]
+    # resources = ["${var.target_group_arn}"]
+    # }
+    createNetIfaces = {
       effect = "Allow"
       actions = [
         "elasticloadbalancing:RegisterTargets",
         "elasticloadbalancing:DescribeTargetHealth",
-        "elasticloadbalancing:DeregisterTargets"
+        "elasticloadbalancing:DeregisterTargets",
+        "ec2:CreateNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DeleteNetworkInterface"
       ]
-      resources = ["${var.target_group_arn}"]
+      resources = ["*"]
     }
-    # createNetIfaces = {
-    # effect = "Allow"
-    # actions = [
-    # "ec2:CreateNetworkInterface",
-    # "ec2:DescribeNetworkInterfaces",
-    # "ec2:DeleteNetworkInterface"
-    # ]
-    # resources = ["*"]
-    # }
   }
 
   cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
