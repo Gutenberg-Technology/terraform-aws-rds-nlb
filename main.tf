@@ -41,7 +41,7 @@ resource "aws_sns_topic_subscription" "this" {
 #
 module "lambda_function" {
   source                 = "terraform-aws-modules/lambda/aws"
-  version                = "2.27.0"
+  version                = "3.2.1"
   function_name          = "${var.name}-rds-nlb-function"
   description            = "updates target-group with IP from RDS db_instance(s)"
   source_path            = "${path.module}/lambda/"
