@@ -53,3 +53,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "runtime" {
+  description = "The runtime to use for the lambda function"
+  type        = string
+  default     = "python3.7"
+}
